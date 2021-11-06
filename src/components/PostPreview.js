@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const PostSection = styled.div`
   height: auto;
@@ -74,7 +76,19 @@ const PostPreview = (props) => {
         <Divider />
         <PostData>
           <p>{postDate}</p>
-          <p>Comments: {comments.length}</p>
+          {comments.length === 0 ? (
+            <p>
+              <FontAwesomeIcon icon={faCommentAlt} /> Add a comment
+            </p>
+          ) : comments.length === 1 ? (
+            <p>
+              <FontAwesomeIcon icon={faCommentAlt} /> {comments.length} Comment
+            </p>
+          ) : (
+            <p>
+              <FontAwesomeIcon icon={faCommentAlt} /> {comments.length} Comments
+            </p>
+          )}
         </PostData>
       </PostSection>
     </div>
