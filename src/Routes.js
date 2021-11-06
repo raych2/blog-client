@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import App from './App';
 import Header from './components/Header';
+import PostDetail from './components/PostDetail';
 
 const Routes = () => {
   return (
@@ -8,6 +9,7 @@ const Routes = () => {
       <Header />
       <Switch>
         <Route exact path="/" component={App} />
+        <Route exact path="/posts/:id" component={PostDetail} />
       </Switch>
     </Router>
   );
