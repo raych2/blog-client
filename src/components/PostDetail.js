@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Spinner from 'react-spinkit';
+import CommentDetail from './CommentDetail';
 
 const SpinnerContainer = styled.div`
   margin-top: 200px;
@@ -61,7 +62,6 @@ const PostDetail = ({ match }) => {
           `https://rt-blog-api.herokuapp.com/posts/${match.params.id}`
         );
         const data = await response.json();
-        console.log(data.post);
         setBlogPost(data.post);
         setAuthor(data.post.author.username);
       } catch (err) {
@@ -96,17 +96,12 @@ const PostDetail = ({ match }) => {
                 blogPost.comments.map((comment) => {
                   return (
                     <div key={comment._id}>
-                      <p>
-                        {comment.author} says '{comment.text}'
-                      </p>
-                      <p>{comment.commentDate}</p>
+                      <CommentDetail comment={comment} />
                     </div>
                   );
                 })
               ) : (
-                <p>
-                  There are no comments. Be the first to add a comment.
-                </p>
+                <p>There are no comments. Be the first to add a comment.</p>
               )}
             </CommentList>
           </CommentSection>
