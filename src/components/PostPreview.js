@@ -10,7 +10,7 @@ const PostSection = styled.div`
   margin: 10px 0;
   padding: 20px;
   background: #ffffff;
-  border: 1px solid #000;
+  border: .5px solid #7a7a7a;
   border-radius: 5px;
   @media (max-width: 400px) {
     width: 100%;

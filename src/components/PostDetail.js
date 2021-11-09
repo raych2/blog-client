@@ -16,7 +16,7 @@ const PostLayout = styled.div`
   height: auto;
   width: 50vw;
   background: #ffffff;
-  border: 0.5px solid #e5e5e5;
+  border: 0.5px solid #7a7a7a;
   border-radius: 5px;
   @media (max-width: 400px) {
     width: 100%;
