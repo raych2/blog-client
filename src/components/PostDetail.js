@@ -10,8 +10,11 @@ const PostLayout = styled.div`
   background: #ffffff;
   border: 0.5px solid #7a7a7a;
   border-radius: 5px;
-  @media (max-width: 400px) {
-    width: 100%;
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    width: 90%;
+  }
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    width: 95%;
   }
 `;
 const PostSection = styled.div`
@@ -25,6 +28,9 @@ const CommentForm = styled.form`
   flex-flow: column wrap;
   margin: 10px auto 0 auto;
   padding: 20px;
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    padding: 0;
+  }
 `;
 const GuestName = styled.input`
   display: block;
@@ -58,6 +64,9 @@ const SubmitButton = styled.input`
 `;
 const CommentList = styled.div`
   padding: 20px;
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    padding: 0;
+  }
 `;
 const Title = styled.h1`
   margin: 5px auto;

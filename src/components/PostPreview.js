@@ -4,16 +4,24 @@ import styled from 'styled-components';
 import { faCommentAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+const PostContainer = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+`;
 const PostSection = styled.div`
   height: auto;
   width: 50vw;
   margin: 10px 0;
   padding: 20px;
   background: #ffffff;
-  border: .5px solid #7a7a7a;
+  border: 0.5px solid #7a7a7a;
   border-radius: 5px;
-  @media (max-width: 400px) {
-    width: 100%;
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    width: 80vw;
+  }
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    width: 95%;
   }
 `;
 const PostInfo = styled.div`
@@ -50,7 +58,7 @@ const PostData = styled.div`
   justify-content: space-between;
   max-width: 100%;
   margin: 0 auto;
-  @media (max-width: 400px) {
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
     flex-direction: column;
   }
 `;
@@ -64,7 +72,7 @@ const PostPreview = (props) => {
   const postText = props.post.text.substring(0, 75) + '...';
 
   return published ? (
-    <div>
+    <PostContainer>
       <PostSection>
         <PostInfo>
           <PostLink to={`/posts/${id}`}>
@@ -91,7 +99,7 @@ const PostPreview = (props) => {
           )}
         </PostData>
       </PostSection>
-    </div>
+    </PostContainer>
   ) : null;
 };
 
