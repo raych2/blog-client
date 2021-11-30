@@ -119,7 +119,7 @@ const PostDetail = ({ match }) => {
     e.preventDefault();
     setError(false);
     try {
-      const response = await fetch(`https://rt-blog-api.herokuapp.com/posts/${match.params.id}/comments/addComment`, {
+      const response = await fetch(`https://rt-blog-api.herokuapp.com/posts/${match.params.id}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
