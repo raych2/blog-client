@@ -1,16 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Spinner from 'react-spinkit';
 import CommentDetail from './CommentDetail';
+import LoadingIndicator from './shared/LoadingIndicator';
 
-const SpinnerContainer = styled.div`
-  margin-top: 200px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-`;
 const PostLayout = styled.div`
   margin: 50px auto 0 auto;
   height: auto;
@@ -115,37 +107,38 @@ const PostDetail = ({ match }) => {
     fetchBlogPostAPI();
   }, [match.params.id]);
 
-  const addComment = async(e) => {
+  const addComment = async (e) => {
     e.preventDefault();
     setError(false);
     try {
-      const response = await fetch(`https://rt-blog-api.herokuapp.com/posts/${match.params.id}/comments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          author: guestName, 
-          text: guestComment
-        }),
-      });
+      const response = await fetch(
+        `https://rt-blog-api.herokuapp.com/posts/${match.params.id}/comments`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            author: guestName,
+            text: guestComment,
+          }),
+        }
+      );
       const commentData = await response.json();
       setComments([...comments, commentData.comment]);
     } catch (err) {
-      console.log(err)
+      console.log(err);
       setError(true);
     }
     setGuestName('');
     setGuestComment('');
-  }
+  };
 
   return (
     <div>
       {error && <div>An error occurred</div>}
       {loading ? (
-        <SpinnerContainer>
-          <Spinner name="ball-spin-fade-loader" color="#FCA311" />
-        </SpinnerContainer>
+        <LoadingIndicator />
       ) : (
         <PostLayout>
           <PostSection>
@@ -156,29 +149,29 @@ const PostDetail = ({ match }) => {
           </PostSection>
           <CommentSection>
             <CommentHeader>Comments:</CommentHeader>
-              <CommentForm onSubmit={addComment}>
-                <label htmlFor="guestName">Name:</label>
-                <GuestName
-                  value={guestName}
-                  type="text"
-                  id="guestName"
-                  onChange={(e) => setGuestName(e.target.value)}
-                  placeholder="Name"
-                  required
-                />
-                <label htmlFor="guestComment">Comment:</label>
-                <GuestComment
-                  value={guestComment}
-                  id="guestComment"
-                  rows="3"
-                  cols="33"
-                  maxLength="500"
-                  onChange={(e) => setGuestComment(e.target.value)}
-                  placeholder="Share your thoughts on this blog post"
-                  required
-                />
-                <SubmitButton type="submit" value="Submit" />
-              </CommentForm>
+            <CommentForm onSubmit={addComment}>
+              <label htmlFor="guestName">Name:</label>
+              <GuestName
+                value={guestName}
+                type="text"
+                id="guestName"
+                onChange={(e) => setGuestName(e.target.value)}
+                placeholder="Name"
+                required
+              />
+              <label htmlFor="guestComment">Comment:</label>
+              <GuestComment
+                value={guestComment}
+                id="guestComment"
+                rows="3"
+                cols="33"
+                maxLength="500"
+                onChange={(e) => setGuestComment(e.target.value)}
+                placeholder="Share your thoughts on this blog post"
+                required
+              />
+              <SubmitButton type="submit" value="Submit" />
+            </CommentForm>
             <CommentList>
               {comments && comments.length > 0 ? (
                 comments.map((comment) => {
