@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import {
+  HashRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 import App from './App';
 import Header from './components/Header';
 import PostDetail from './components/PostDetail';
@@ -9,7 +14,7 @@ const Routes = () => {
       <Header />
       <Switch>
         <Route exact path="/" component={App} />
-        <Route exact path="/posts/:id" component={PostDetail} />
+        <Route path="/posts/:id" component={PostDetail} />
         <Redirect exact from="/posts" to="/" />
       </Switch>
     </Router>
