@@ -23,6 +23,11 @@ const PostSection = styled.div`
 `;
 const CommentSection = styled.div`
   padding: 20px;
+  input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
 `;
 const CommentForm = styled.form`
   display: flex;
