@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CommentDetail from './CommentDetail';
 import LoadingIndicator from './shared/LoadingIndicator';
+import ErrorMessage from './shared/ErrorMessage';
 
 const PostLayout = styled.div`
   margin: 50px auto 0 auto;
@@ -84,31 +85,42 @@ const Text = styled.p`
 const CommentHeader = styled.h2`
   margin: 5px auto;
 `;
+const CommentError = styled.div`
+  padding: 0 20px;
+  color: #a9232e;
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    padding: 0;
+  }
+`;
 
 const PostDetail = ({ match }) => {
   const [blogPost, setBlogPost] = useState([]);
   const [author, setAuthor] = useState('');
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
+  const [commentError, setCommentError] = useState('');
   const [guestName, setGuestName] = useState('');
   const [guestComment, setGuestComment] = useState('');
 
   useEffect(() => {
     async function fetchBlogPostAPI() {
-      setError(false);
       setLoading(true);
       try {
         const response = await fetch(
           `https://rt-blog-api.herokuapp.com/posts/${match.params.id}`
         );
-        const data = await response.json();
-        setBlogPost(data.post);
-        setAuthor(data.post.author.username);
-        setComments(data.post.comments);
+        if (response.status === 404) {
+          setError(response.statusText);
+        } else {
+          setError('');
+          const data = await response.json();
+          setBlogPost(data.post);
+          setAuthor(data.post.author.username);
+          setComments(data.post.comments);
+        }
       } catch (err) {
         console.log(err);
-        setError(true);
       }
       setLoading(false);
     }
@@ -118,7 +130,6 @@ const PostDetail = ({ match }) => {
 
   const addComment = async (e) => {
     e.preventDefault();
-    setError(false);
     try {
       const response = await fetch(
         `https://rt-blog-api.herokuapp.com/posts/${match.params.id}/comments`,
@@ -134,10 +145,18 @@ const PostDetail = ({ match }) => {
         }
       );
       const commentData = await response.json();
-      setComments([...comments, commentData.comment]);
+      if (commentData.errors) {
+        let commentErrors = [];
+        commentData.errors.forEach((error) => {
+          commentErrors.push(`${error.msg} `);
+        });
+        setCommentError(commentErrors);
+      } else {
+        setCommentError('');
+        setComments([...comments, commentData.comment]);
+      }
     } catch (err) {
       console.log(err);
-      setError(true);
     }
     setGuestName('');
     setGuestComment('');
@@ -145,57 +164,67 @@ const PostDetail = ({ match }) => {
 
   return (
     <div>
-      {error && <div>An error occurred</div>}
-      {loading ? (
-        <LoadingIndicator />
+      {error ? (
+        <ErrorMessage>Error: {error}</ErrorMessage>
       ) : (
-        <PostLayout>
-          <PostSection>
-            <Title>{blogPost.title}</Title>
-            <Author>{author}</Author>
-            <Date>Posted on {blogPost.postDate}</Date>
-            <Text>{blogPost.text}</Text>
-          </PostSection>
-          <CommentSection>
-            <CommentHeader>Comments:</CommentHeader>
-            <CommentForm onSubmit={addComment}>
-              <label htmlFor="guestName">Name:</label>
-              <GuestName
-                value={guestName}
-                type="text"
-                id="guestName"
-                onChange={(e) => setGuestName(e.target.value)}
-                placeholder="Name"
-                required
-              />
-              <label htmlFor="guestComment">Comment:</label>
-              <GuestComment
-                value={guestComment}
-                id="guestComment"
-                rows="3"
-                cols="33"
-                maxLength="500"
-                onChange={(e) => setGuestComment(e.target.value)}
-                placeholder="Share your thoughts on this blog post"
-                required
-              />
-              <SubmitButton type="submit" value="Submit" />
-            </CommentForm>
-            <CommentList>
-              {comments && comments.length > 0 ? (
-                comments.map((comment) => {
-                  return (
-                    <div key={comment._id}>
-                      <CommentDetail comment={comment} />
-                    </div>
-                  );
-                })
-              ) : (
-                <p>There are no comments. Be the first to add a comment.</p>
-              )}
-            </CommentList>
-          </CommentSection>
-        </PostLayout>
+        <>
+          {loading ? (
+            <LoadingIndicator />
+          ) : (
+            <PostLayout>
+              <PostSection>
+                <Title>{blogPost.title}</Title>
+                <Author>{author}</Author>
+                <Date>Posted on {blogPost.postDate}</Date>
+                <Text>{blogPost.text}</Text>
+              </PostSection>
+              <CommentSection>
+                <CommentHeader>Comments:</CommentHeader>
+                <CommentForm onSubmit={addComment}>
+                  <label htmlFor="guestName">Name:</label>
+                  <GuestName
+                    value={guestName}
+                    type="text"
+                    id="guestName"
+                    onChange={(e) => setGuestName(e.target.value)}
+                    placeholder="Name"
+                    required
+                  />
+                  <label htmlFor="guestComment">Comment:</label>
+                  <GuestComment
+                    value={guestComment}
+                    id="guestComment"
+                    rows="3"
+                    cols="33"
+                    maxLength="500"
+                    onChange={(e) => setGuestComment(e.target.value)}
+                    placeholder="Share your thoughts on this blog post"
+                    required
+                  />
+                  <SubmitButton type="submit" value="Submit" />
+                </CommentForm>
+                {commentError ? (
+                  <CommentError>Error: {commentError}</CommentError>
+                ) : (
+                  <></>
+                )}
+                <CommentList>
+                  {comments && comments.length > 0 ? (
+                    comments.map((comment) => {
+                      return (
+                        <div key={comment._id}>
+                          <CommentDetail comment={comment} />
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p>There are no comments. Be the first to add a comment.</p>
+                  )}
+                </CommentList>
+              </CommentSection>
+            </PostLayout>
+          )}
+        </>
       )}
     </div>
   );
