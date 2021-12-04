@@ -70,16 +70,18 @@ const PostPreview = (props) => {
   const postDate = props.post.postDate;
   const comments = props.post.comments;
   const postText = props.post.text.substring(0, 75) + '...';
+  const parseEntities = (text) =>
+    new DOMParser().parseFromString(text, 'text/html').body.innerText;
 
   return published ? (
     <PostContainer>
       <PostSection>
         <PostInfo>
           <PostLink to={`/posts/${id}`}>
-            <PostTitle>{title}</PostTitle>
+            <PostTitle>{parseEntities(title)}</PostTitle>
           </PostLink>
           <PostAuthor>By: {author}</PostAuthor>
-          <PostTextPreview>{postText}</PostTextPreview>
+          <PostTextPreview>{parseEntities(postText)}</PostTextPreview>
         </PostInfo>
         <Divider />
         <PostData>

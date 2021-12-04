@@ -107,6 +107,8 @@ const PostDetail = ({ match }) => {
   const [commentError, setCommentError] = useState('');
   const [guestName, setGuestName] = useState('');
   const [guestComment, setGuestComment] = useState('');
+  const parseEntities = (text) =>
+    new DOMParser().parseFromString(text, 'text/html').body.innerText;
 
   useEffect(() => {
     async function fetchBlogPostAPI() {
@@ -178,10 +180,10 @@ const PostDetail = ({ match }) => {
           ) : (
             <PostLayout>
               <PostSection>
-                <Title>{blogPost.title}</Title>
+                <Title>{parseEntities(blogPost.title)}</Title>
                 <Author>{author}</Author>
                 <Date>Posted on {blogPost.postDate}</Date>
-                <Text>{blogPost.text}</Text>
+                <Text>{parseEntities(blogPost.text)}</Text>
               </PostSection>
               <CommentSection>
                 <CommentHeader>Comments:</CommentHeader>

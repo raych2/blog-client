@@ -16,9 +16,11 @@ const Author = styled.p`
 `;
 
 const CommentDetail = (props) => {
+  const parseEntities = (text) =>
+    new DOMParser().parseFromString(text, 'text/html').body.innerText;
   const author = props.comment.author;
   const commentDate = props.comment.commentDate;
-  const text = props.comment.text;
+  const text = parseEntities(props.comment.text);
 
   return (
     <CommentContainer>
