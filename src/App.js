@@ -7,8 +7,8 @@ import ErrorMessage from './components/shared/ErrorMessage';
 const PostList = styled.div`
   margin-top: 50px;
   display: flex;
-  flex-flow: column wrap;
-  align-content: space-around;
+  flex-flow: column nowrap;
+  align-content: space-evenly;
 `;
 
 const App = () => {
